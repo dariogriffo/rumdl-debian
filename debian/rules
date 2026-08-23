@@ -1,0 +1,58 @@
+#!/usr/bin/make -f
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+RUMDL_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/[-~].*//')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+
+# Upstream tags carry a "v" prefix (e.g. v0.2.60) and repeat the tag inside the
+# release asset name, which is why the version appears twice below. Upstream
+# publishes a glibc and a musl build per architecture; we take the musl one,
+# which is statically linked, so the package declares no libc dependency and
+# dh_shlibdeps is disabled. The tarball holds a bare "rumdl" binary with no top
+# level directory, hence the extraction into a directory we create ourselves.
+override_dh_auto_build:
+	@arch="$(DEB_HOST_ARCH)"; \
+	case "$$arch" in \
+		amd64) target="x86_64-unknown-linux-musl" ;; \
+		arm64) target="aarch64-unknown-linux-musl" ;; \
+		*) echo "Unsupported architecture: $$arch"; exit 1 ;; \
+	esac; \
+	RUMDL_RELEASE="rumdl-v$(RUMDL_VERSION)-$$target"; \
+	echo "Downloading $$RUMDL_RELEASE for $(RUMDL_VERSION)..."; \
+	wget -q "https://github.com/rvben/rumdl/releases/download/v$(RUMDL_VERSION)/$$RUMDL_RELEASE.tar.gz"; \
+	rm -rf "$$RUMDL_RELEASE"; \
+	mkdir -p "$$RUMDL_RELEASE"; \
+	tar -xf "$$RUMDL_RELEASE.tar.gz" -C "$$RUMDL_RELEASE"; \
+	rm -f "$$RUMDL_RELEASE.tar.gz"; \
+	if [ ! -f "$$RUMDL_RELEASE/rumdl" ]; then \
+		echo "Unexpected tarball layout for $$RUMDL_RELEASE (missing rumdl binary)"; exit 1; \
+	fi; \
+	chmod +x "$$RUMDL_RELEASE/rumdl"; \
+	mkdir -p completions; \
+	"./$$RUMDL_RELEASE/rumdl" completions bash > completions/rumdl.bash; \
+	"./$$RUMDL_RELEASE/rumdl" completions zsh  > completions/_rumdl; \
+	"./$$RUMDL_RELEASE/rumdl" completions fish > completions/rumdl.fish; \
+	echo "$$RUMDL_RELEASE" > .rumdl_release_name
+
+override_dh_auto_install:
+	@RUMDL_RELEASE=$$(cat .rumdl_release_name); \
+	install -D -m 755 "$$RUMDL_RELEASE/rumdl" debian/rumdl/usr/bin/rumdl; \
+	install -D -m 644 completions/rumdl.bash debian/rumdl/usr/share/bash-completion/completions/rumdl; \
+	install -D -m 644 completions/rumdl.fish debian/rumdl/usr/share/fish/vendor_completions.d/rumdl.fish; \
+	install -D -m 644 completions/_rumdl debian/rumdl/usr/share/zsh/vendor-completions/_rumdl
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+	@if [ -f .rumdl_release_name ]; then \
+		RUMDL_RELEASE=$$(cat .rumdl_release_name); \
+		rm -rf "$$RUMDL_RELEASE" .rumdl_release_name || true; \
+	fi
+	rm -rf completions
+
+override_dh_strip:
+
+override_dh_shlibdeps:

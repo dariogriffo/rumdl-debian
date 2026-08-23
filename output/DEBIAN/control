@@ -1,0 +1,22 @@
+Source: rumdl
+Section: devel
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://github.com/rvben/rumdl
+Package: rumdl
+Version: rumdl_VERSION-BUILD_VERSION~DIST
+Architecture: SUPPORTED_ARCHITECTURES
+Description: fast Markdown linter and formatter written in Rust
+ rumdl checks Markdown files against the markdownlint rule set (MD001 onwards)
+ and reports violations with precise line and column positions, but does the
+ work in a fraction of the time the Node.js implementations take. Most rules
+ can also fix themselves, so "rumdl check --fix" and "rumdl fmt" repair a tree
+ in place instead of only complaining about it.
+ .
+ Configuration lives in rumdl.toml, .rumdl.toml or a [tool.rumdl] section of
+ pyproject.toml, and an existing markdownlint configuration can be converted
+ with "rumdl import". Individual rules are documented in the binary itself via
+ "rumdl rule" and "rumdl explain".
+ .
+ A Language Server is built in ("rumdl server"), which gives diagnostics and
+ fix-on-save in any LSP-capable editor without a separate package.

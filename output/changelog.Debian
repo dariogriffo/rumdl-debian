@@ -1,0 +1,97 @@
+rumdl (FULL_VERSION) DIST; urgency=low
+
+  ## v0.2.60 (2026-08-22)
+
+  - Update the bundled h2 dependency to 0.4.16.
+
+  ## v0.2.59 (2026-08-22)
+
+  - MD033 ignores escaped HTML tag openers instead of reporting them as inline
+    HTML.
+  - Absolute configuration patterns are matched through symlinks.
+  - MD013 reflow no longer joins a setext heading into its own underline.
+
+  ## v0.2.58 (2026-08-19)
+
+  - The WebAssembly build loads `extends` chains from configuration files
+    supplied by the embedder.
+
+  ## v0.2.57 (2026-08-18)
+
+  - Under `require-sentence-capital`, MD013 lets a sentence open with a number.
+  - The language server keeps a CRLF document's line endings through fixes and
+    code actions.
+
+  ## v0.2.56 (2026-08-18)
+
+  - MD076 attaches its edit to each warning, so the CLI reports it as fixable,
+    analyses each nested list on its own spacing, measures a list item's nesting
+    level in columns the way the block tracker does, and preserves fenced list
+    item spacing.
+  - MD064 judges column alignment per list, so a nested item keeps its parent's
+    exemption.
+  - MD032 measures list indent and an HTML opener's indent in columns, so a tab
+    nests and continues an item.
+  - MD013 reads sentence openers off the parse, honours reference definitions,
+    and keeps links, images, math and HTML whole in sentence reflow.
+
+  ## v0.2.55 (2026-08-12)
+
+  - The language server honours per-directory configuration across workspace
+    features, and builds its workspace index rules directly.
+  - Path-aware document processing is aligned across adapters.
+
+  ## v0.2.54 (2026-08-11)
+
+  - The GitHub Action gained a `command` input for running `rumdl fmt` and an
+    `install-only` input that skips linting.
+  - MD010 gained `ignore-code-languages`, exempting fence languages from tab
+    checks.
+  - Reference links and images are no longer parsed inside HTML blocks, and a
+    nested raw-text element no longer opens its own block.
+  - Several code-block-tools fixes: findings are reported on the line they
+    belong to, a linter in a format slot no longer overwrites the block, and a
+    hanging tool is bounded by its timeout rather than respawned.
+
+  ## v0.2.53 (2026-08-10)
+
+  - Tables are measured in the document's own flavor, and quoted brackets with
+    a blank target are no longer treated as a wikilink.
+  - Language server indexing keeps open buffers correct across rescans and
+    evictions.
+  - MD075 ignores Obsidian wikilink aliases in prose after tables; MD084 stops
+    deleting line endings as invisible characters.
+
+  ## v0.2.52 (2026-08-05)
+
+  - MD012 reports blank lines before a code block that ends the document.
+  - Template shortcode tags are treated as opaque markup.
+  - A piped document's findings are reported on stdout like every other run.
+
+  ## v0.2.51 (2026-08-05)
+
+  - New rule MD088 normalises quotes and dashes to ASCII, leaving modifier
+    letters and math notation alone.
+  - `rumdl config get` answers for every key rumdl accepts and reports the
+    effective global rule lists.
+  - MD051 validates cross-file link fragments for documents read from stdin.
+
+  ## v0.2.50 (2026-08-04)
+
+  - MD077 supports a fixed continuation indent, with the strict-flavor minimum
+    kept as a floor.
+  - MD065, MD076, MD022 and MD040 corrections around thematic breaks, fenced
+    blocks inside list items and blank lines below headings.
+
+  ## v0.2.49 (2026-08-02)
+
+  - Security: an `extends` value is expanded from the environment before it is
+    resolved, so naming the resolved path in a message printed environment
+    variable values wherever that message went — under CI, the build log. A file
+    reached through `extends` is now named by the reference as written and its
+    own text is never repeated. Reported privately by Shuvam Kumar.
+  - MD072 keeps every trailing newline when sorting frontmatter keys; MD044 and
+    MD039 handle wikilinks and nested images correctly.
+
+  Older entries have been trimmed. The complete upstream changelog lives at
+  https://github.com/rvben/rumdl/blob/main/CHANGELOG.md

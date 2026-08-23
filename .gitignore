@@ -1,0 +1,18 @@
+# .deb Packages
+*.deb
+
+# Source packages
+*.dsc
+*.orig.tar.gz
+*.debian.tar.xz
+
+# Downloaded / extracted upstream release artifacts
+rumdl-v*-unknown-linux-*/
+rumdl-v*-unknown-linux-*.tar.gz
+/completions/
+/usr/
+/DEBIAN/
+.rumdl_release_name
+
+.idea/*
+.DS_Store
