@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
 Homepage: https://github.com/rvben/rumdl
 Package: rumdl
-Version: rumdl_VERSION-BUILD_VERSION~DIST
+Version: rumdl_VERSION-BUILD_VERSION~griffo
 Architecture: SUPPORTED_ARCHITECTURES
 Description: fast Markdown linter and formatter written in Rust
  rumdl checks Markdown files against the markdownlint rule set (MD001 onwards)
